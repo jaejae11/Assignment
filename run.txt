@@ -1,0 +1,361 @@
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include<string.h>
+//#include<time.h>
+//#pragma warning(disable :4996)
+//
+//void search();
+//void menu();
+//
+//struct bookDate {
+//	int day;
+//	int month;
+//	int year;
+//};
+//
+//struct Booking {
+//	char bookId[6];
+//	char facId[6];
+//	char userId[11];
+//	struct bookDate date1;
+//};
+//
+//struct Booking book[20];
+//
+//void menu() {
+//	int src;
+//	printf("1 search");
+//	scanf("%d", &src);
+//
+//	if (src == 1) {
+//		search();
+//	}
+//
+//	else {
+//		menu();
+//	}
+//}
+//
+//void search() {
+//
+//	int i = 0, found = 0;
+//	char search[6];
+//	time_t t = time(NULL);
+//	struct tm tm = *localtime(&t);
+//
+//	FILE*fptr;
+//	fptr = fopen("booking.txt", "r");
+//
+//	if (fptr == NULL)
+//	{
+//		printf("Error opening file.Please check filename!\n");
+//	}
+//	printf("Enter booking ID to search: ");
+//	scanf("%s", &search);
+//
+//	while (fscanf(fptr, "%[^|]|%[^|]|%[^|]\n", &book[i].bookId, &book[i].facId, &book[i].userId) != EOF)
+//	{
+//		if (strcmp(search, book[i].bookId) == 0) {
+//			printf("%s%s%s\n", book[i].bookId, book[i].facId, book[i].userId);
+//			found = 1;
+//		}
+//	}
+//
+//	if (found == 0)
+//		printf("No record founded\n");
+//
+//	printf("%d record founded.\n", found);
+//	fclose(fptr);
+//
+//
+//
+//	system("pause");
+//}
+
+
+
+
+
+
+
+
+2------------------------------------
+
+
+
+
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include<string.h>
+//#include<time.h>
+//#pragma warning(disable :4996)
+//
+//void search();
+//struct bookDate {
+//	int day;
+//	int month;
+//	int year;
+//};
+//
+//struct Booking {
+//	char bookId[6];
+//	char facId[6];
+//	char userId[11];
+//	struct bookDate date1;
+//};
+//
+//struct Booking book[20];
+//
+//void main() {
+//
+//	int i = 0, found = 0;
+//	char search[6];
+//	char ans;
+//	time_t t = time(NULL);
+//	struct tm tm = *localtime(&t);
+//
+//	FILE*fptr;
+//	fptr = fopen("booking.txt", "w");
+//
+//	if (fptr == NULL)
+//	{
+//		printf("Error opening file.Please check filename!\n");
+//	}
+//	printf("Now's time->%d-%d-%d %02d:%02d\n", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min);
+//
+//void search() {
+//		printf("Enter user booking ID : ");
+//		scanf("%s", &book[i].bookId);
+//		rewind(stdin);
+//
+//		printf("Enter facility ID to use : ");
+//		scanf("%s", &book[i].facId);
+//		rewind(stdin);
+//
+//		printf("Enter user ID : ");
+//		scanf("%s", &book[i].userId);
+//		rewind(stdin);
+//
+//		printf("Enter Booking Date (dd/mm/year): ");
+//		scanf("%d%d%d", &book[i].date1.day, &book[i].date1.month, &book[i].date1.year);
+//
+//		fprintf(fptr, "%s|%s|%s\n", book[i].bookId, book[i].facId, book[i].userId);
+//
+//		fclose(fptr);
+//
+//		FILE*fptr;
+//		fptr = fopen("booking.txt", "r");
+//
+//		if (fptr == NULL)
+//		{
+//			printf("Error opening file.Please check filename!\n");
+//		}
+//		printf("Enter booking ID to search: ");
+//		scanf("%s", &search);
+//
+//		while (fscanf(fptr, "%[^|]|%[^|]|%[^|]\n", &book[i].bookId, &book[i].facId, &book[i].userId) != EOF)
+//		{
+//			if (strcmp(search, book[i].bookId) == 0) {
+//				printf("%s%s%s\n", book[i].bookId, book[i].facId, book[i].userId);
+//				found = 1;
+//			}
+//		}
+//
+//		if (found == 0) {
+//			printf("No record founded\n");
+//
+//			printf("%d record founded.\n", found);
+//			fclose(fptr);
+//			printf("Do you want to continue?");
+//			scanf("%c", &ans);
+//		}
+//		if (ans == 'y' || ans == 'Y') {
+//			search();
+//
+//		else{
+//			main();
+//		}
+//
+//
+//		system("pause");
+//}
+
+
+
+
+
+3-------------------------------------
+
+
+
+
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include<string.h>
+//#include<time.h>
+//#pragma warning(disable :4996)
+//
+//
+//struct bookDate {
+//	int day;
+//	int month;
+//	int year;
+//};
+//
+//struct Booking {
+//	char bookId[6];
+//	char facId[6];
+//	char userId[11];
+//	struct bookDate date1;
+//};
+//
+//struct Booking book[20];
+//
+//void main() {
+//
+//	int i = 0, list = 0;
+//	char search[6];
+//	time_t t = time(NULL);
+//	struct tm tm = *localtime(&t);
+//
+//	FILE*fptr;
+//	fptr = fopen("booking.txt", "w");
+//
+//	if (fptr == NULL)
+//	{
+//		printf("Error opening file.Please check filename!\n");
+//	}
+//
+//	while (fscanf(fptr, "%[^|]|%[^|]|%[^|]\n", &book[i].bookId, &book[i].facId, &book[i].userId) != EOF)
+//	{
+//		printf("%s%s%s\n", book[i].bookId, book[i].facId, book[i].userId);
+//		list++;
+//	}
+//
+//	printf("%d record listed.\n", list);
+//	fclose(fptr);
+//
+//	system("pause");
+//}
+
+
+
+
+
+
+
+4-------------------------------------------
+
+
+
+
+
+
+
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include<string.h>
+//#include<time.h>
+//#pragma warning(disable :4996)
+//
+//
+//struct bookDate {
+//	int day;
+//	int month;
+//	int year;
+//};
+//
+//struct Booking {
+//	char bookId[6];
+//	char facId[6];
+//	char userId[11];
+//	struct bookDate date1;
+//};
+//
+//struct Booking book[20];
+//
+//void main() {
+//
+//	int i = 0, found = 0, count = 0, modiCount = 0;
+//	char search[6];
+//	char newBookId[6];
+//	char newFacId[6];
+//	char newUserId[11];
+//	int newDay, newMonth, newYear;
+//	char ans;
+//	time_t t = time(NULL);
+//	struct tm tm = *localtime(&t);
+//
+//	FILE*fptr;
+//	fptr = fopen("booking.txt", "r");
+//
+//	if (fptr == NULL)
+//	{
+//		printf("Error opening file.Please check filename!\n");
+//	}
+//
+//	while (fscanf(fptr, "%[^|]|%[^|]|%[^|]\n", &book[i].bookId, &book[i].facId, &book[i].userId) != EOF)
+//	{
+//		i++;
+//		count = i;
+//	}
+//	fclose(fptr);
+//
+//	printf("Enter the booking ID to be modified : ");
+//	scanf("%s", &search);
+//	rewind(stdin);
+//	found = 0;
+//
+//	for (i = 0; i < count; i++); {
+//		if (strcmp(search, book[i].bookId) == 0)
+//		{
+//			found = 1;
+//			printf("%s%s%s\n", book[i].bookId, book[i].facId, book[i].userId);
+//
+//			printf("Enter new user booking ID : ");
+//			scanf("%s", &newBookId);
+//			rewind(stdin);
+//
+//			printf("Enter new facility ID to use : ");
+//			scanf("%s", &newFacId);
+//			rewind(stdin);
+//
+//			printf("Enter new user ID : ");
+//			scanf("%s", &newUserId);
+//			rewind(stdin);
+//
+//			printf("Enter new booking date (dd/mm/year): ");
+//			scanf("%d%d%d", &newDay, &newMonth, &newYear);
+//
+//			printf("Confirm to Modify (Y=yes)? ");
+//			rewind(stdin);
+//			scanf("%c", &ans);
+//
+//			if (toupper(ans) == 'Y') {
+//				strcpy(book[i].bookId, newBookId);
+//				strcpy(book[i].facId, newFacId);
+//				strcpy(book[i].userId, newUserId);
+//				newDay = book[i].date1.day;
+//				newMonth = book[i].date1.month;
+//				newYear = book[i].date1.year;
+//				modiCount++;
+//			}
+//		}
+//
+//	}
+//
+//	fptr = fopen("booking.txt", "w");
+//
+//
+//
+//	system("pause");
+
+
+
+
+
+
+
+
+
+

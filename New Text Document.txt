@@ -1,0 +1,353 @@
+#include <stdio.h>
+#include <stdlib.h>
+#pragma warning (disable: 4996)
+
+void bookingMenu(void);
+void add(void);
+void edit(void);
+void display(void);
+void search(void);
+void bookingCourt(void);
+void bookingTime(void);
+void bookingDate(void);
+void invalidInput(void);
+//void editChoice(void);
+//void assignValue(void);
+int choice;
+char reinput, reinput2, ID[50], userID[50];
+
+struct booking {
+	char name[50];
+	char time[50];
+	char date[50];
+	char court[50];
+	char facilityID;
+}bookingInfo;
+
+void main()
+{
+	do {
+		/assignValue();/
+		bookingMenu();
+
+		switch (choice)
+		{
+		case 1:
+			add();
+			break;
+		case 2:
+			edit();
+			break;
+		case 3:
+			display();
+			break;
+		case 4:
+			search();
+			break;
+		case 5:
+			printf("Returning \n");
+			break;
+		default:
+			do {
+				printf("Invalid input \n");
+				printf("Press 'r' to reinput: ");
+				scanf(" %c", &reinput);
+				rewind(stdin);
+			} while (reinput != 'r');
+		}
+	} while (reinput == 'r');
+	
+	system("pause");
+}
+
+//void assignValue()
+//{
+//	int count = 1;
+//	bookingInfo[count];
+//	FILE* fp;
+//	fp = fopen("bookingList.txt", "r");
+//	while (fscanf(fp, " %[^||]||%[^||]||%[^||]||%[^||]||%s\n", &bookingInfo[count].name, &bookingInfo[count].time, &bookingInfo[count].date, &bookingInfo[count].court, &bookingInfo[count].facilityID) != EOF)
+//	{
+//		count++;
+//		printf("%s %s %s %s %s", bookingInfo[count].name, bookingInfo[count].time, bookingInfo[count].date, bookingInfo[count].court, bookingInfo[count].facilityID);
+//	}
+//}
+
+void bookingMenu()
+{
+	printf("------ Booking Module ----- \n");
+	printf("1. Add booking\n");
+	printf("2. Edit booked events\n");
+	printf("3. Display all booked events \n");
+	printf("4. Search for booked events\n");
+	printf("5. Return \n");
+	printf("Enter your choice: ");
+	scanf("%d", &choice);
+}
+
+void invalidInput()
+{
+	do {
+		printf("Invalid input \n");
+		printf("Press 'r' to reinput: ");
+		scanf(" %c", &reinput);
+		rewind(stdin);
+	} while (reinput != 'r');
+}
+
+void add()
+{
+	printf("Enter your ID: ");
+	scanf("%s", &ID);
+	rewind(stdin);
+
+	FILE *fp;
+	int found = 0;
+	fp = fopen("user.txt", "r");
+
+	while (!feof(fp))
+	{
+		fscanf(fp, "%[^\n]\n", &userID);
+		if (strcmp(userID, ID) == 0)
+		{
+			found = 1;
+			printf("Indentity successful \n");
+			bookingCourt();
+		}
+		
+	}
+
+	if (found == 0)
+	{
+		printf("Invalid ID \n");
+		printf("Register on User ID \n");
+
+	}
+}
+
+void bookingCourt()
+{
+	do{
+		printf("Choose the court that you wished to booked \n");
+		printf("1. Badminton Court \n");
+		printf("2. Tennis Court \n");
+		printf("Choice: ");
+		scanf("%d", &choice);
+
+	
+		switch (choice)
+		{
+		case 1:
+			printf("1 \n");
+			bookingDate();
+			/bookingTime();/
+			break;
+		case 2:
+			printf("2 \n");
+			bookingDate();
+			/bookingTime();/
+			break;
+		default:
+			do {
+				printf("Invalid input \n");
+				printf("Press 'r' to reinput: ");
+				scanf(" %c", &reinput2);
+				rewind(stdin);
+			} while (reinput2 != 'r');
+		}
+	} while (reinput2 == 'r');
+
+}
+
+void bookingDate()
+{
+	char name[50], time[50], date[50], court[50], facility[50];
+	char confirmDate;
+	char inputdate[30];
+	char time1[30] = "8:00-10:00";
+	char time2[30] = "10:00-12:00";
+	char time3[30] = "12:00-2:00";
+	char time4[30] = "2:00-4:00";
+	printf("Enter your booking date (xx/xx/xx) : ");
+	scanf("%s", &inputdate);
+	rewind(stdin);
+	printf("Confirm Date (Y/N): ");
+	scanf("%c", &confirmDate);
+	rewind(stdin);
+
+	FILE* fp;
+	fp = fopen("bookingList.txt", "r");
+	int found = 0;
+	while (fscanf(fp, " %[^||]||%[^||]||%[^||]||%[^||]||%s\n", &name, &time, &date, &court, &facility) != EOF)
+	{
+		if (strcmp(inputdate, date) == 0)
+		{
+			found = 1;
+			printf("This is the avaible time: \n");
+			printf("Not available time will be marked with * \n");
+			if (strcmp(time1, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. *\n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. \n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. \n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. \n");
+			}
+			else if (strcmp(time2, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. \n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. *\n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. \n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. \n");
+			}
+			else if (strcmp(time3, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. \n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. \n");
+				printf("--> 12: 00 p.m. -- 2: 00 p.m. *\n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. \n");
+			}
+			else if (strcmp(time4, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. \n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. \n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. \n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. *\n");
+			}
+			/*else if (strcmp(time1, time) == 0 && strcmp(time2, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. *\n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. *\n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. \n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. \n");
+			}
+			else if (strcmp(time1, time) == 0 && strcmp(time3, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. *\n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. \n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. *\n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. \n");
+			}
+			else if (strcmp(time1, time) == 0 && strcmp(time4, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. *\n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. \n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. \n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. *\n");
+			}
+			else if (strcmp(time2, time) == 0 && strcmp(time3, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. \n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m.* \n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. *\n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. \n");
+			}
+			else if (strcmp(time2, time) == 0 && strcmp(time4, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. \n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m.* \n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. \n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. *\n");
+			}
+			else if (strcmp(time3, time) == 0 && strcmp(time4, time) == 0)
+			{
+				printf("1. 8: 00 a.m. -- 10: 00 a.m. \n");
+				printf("2. 10: 00 a.m. -- 12: 00 p.m. \n");
+				printf("3. 12: 00 p.m. -- 2: 00 p.m. *\n");
+				printf("4. 4: 00 p.m. -- 6: 00 p.m. *\n");
+			}
+			*/
+			
+		}
+	}
+
+
+}
+
+void bookingTime()
+{
+	printf("Here's the available time \n");
+	printf("Not available time will be marked with * \n");
+	printf("1. 8: 00 a.m. -- 10: 00 a.m. \n");
+	printf("2. 10: 00 a.m. -- 12: 00 p.m. \n");
+	printf("3. 12: 00 p.m. -- 2: 00 p.m. \n");
+	printf("4. 4: 00 p.m. -- 6: 00 p.m. \n");
+	printf("Choice: ");
+	scanf("%d", &choice);
+}
+
+void edit()
+{
+	char name[50], time[50], date[50], court[50], facility[50];
+	int searchChoice;
+	char bookingID[30], confirmEdit;
+	printf("edit \n");
+	printf("Edit by \n");
+	printf("1. Booking ID \n");
+	printf("2. booking Date \n");
+	printf("Choice: ");
+	scanf("%d", &searchChoice);
+
+	switch (searchChoice)
+	{
+	case 1:
+		printf("Enter booking ID: ");
+		scanf("%s", &bookingID);
+		rewind(stdin);
+
+		FILE* fp;
+		fp = fopen("bookingList.txt", "r");
+		int found = 0;
+		while (fscanf(fp, "%[^||]||%[^||]||%[^||]||%[^||]||%s\n", &name, &time, &date, &court, &facility) != EOF)
+		{
+			if (strcmp(name, bookingID) == 0)
+			{
+				int found = 1;
+				printf("Record found \n");
+				printf("%s %s %s %s %s \n", name, time, date, court, facility);
+				printf("Confirm edit? (y/n): ");
+				scanf("%c", &confirmEdit);
+				rewind(stdin);
+			}
+		}
+
+	}
+}
+
+//void editChoice()
+//{
+//	int editField;
+//
+//	printf("Choose your edit field \n");
+//	printf("1. Time \n");
+//	printf("2. Date \n");
+//	printf("3. Court \n");
+//	printf("4. Delete all the record \n");
+//	printf("Choice: ");
+//	scanf("%d", editField);
+//
+//	switch (editField)
+//	{
+//	case 1:
+//		printf("Enter your new date");
+//	}
+//}
+
+void search()
+{
+	printf("search \n");
+	printf("Enter your searching choice \n");
+	printf("1. Booking ID \n");
+	printf("2. Booking Date \n");
+}
+
+void display()
+{
+	char name[50], time[50], date[50], court[50], facility[50];
+	FILE* fp;
+	fp = fopen("bookingList.txt", "r");
+	printf("%8s %11s %12s %14s %17s \n", "User ID", "Time", "Date", "Court", "Facility ID");
+	while (fscanf(fp, "%[^||]||%[^||]||%[^||]||%[^||]||%s\n", &name, &time, &date, &court, &facility) != EOF)
+	{
+		printf("%8s||%11s||%9s||%16s||%7s\n", name, time, date, court, facility);
+	}
+}

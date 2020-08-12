@@ -1,0 +1,625 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include <ctype.h>
+#pragma warning(disable:4996)
+
+typedef struct
+{
+
+
+	char bookingdate[20];
+	char bookingtime[20];
+	char bookingtimeuntil[20];
+	char facilityName[20];
+	char userId[20];
+	char facilityId[11];
+
+}facilityUse;
+
+
+void addBooking();
+void searchBooking();
+void modifyBooking();
+void displayBooking();
+
+
+
+
+void main()
+
+{
+	int choice;
+
+
+
+	system("cls");
+	printf("WELCOME TO BOOKING MODULE.\n");
+	printf("HOW CAN I HELP YOU?\n\n");
+	printf("1- ADD BOOKING.\n");
+	printf("2- SEARCH BOOKING.\n");
+	printf("3- DISPLAY BOOKING.\n");
+	printf("4- MODIFY BOOKING.\n");
+	printf("5- Exit.\n");
+	puts("");
+	printf("Please enter your choice. > ");
+	scanf("%d", &choice);
+
+
+	if (choice == 1)
+	{
+		addBooking();
+	}
+	else if (choice == 2)
+	{
+		searchBooking();
+	}
+	else if (choice == 3)
+	{
+		displayBooking();
+	}
+	else if (choice == 4)
+	{
+		modifyBooking();
+	}
+	else if (choice == 5)
+	{
+		exit(-1);
+	}
+
+	else
+		printf("Sorry! Invalid choice.\n");
+	system("pause");
+
+}
+
+
+void addBooking()
+{
+	int checking = 0, chooseTime;
+	char menu;
+	char todaysdate[20];
+	char bookingdate[20];
+	char bookingtime[20];
+	char facilityused[20];
+	char userId[20];
+	char facilityId[11];
+	facilityUse checkFacilityUsage;
+	facilityUse addFacility;
+	rewind(stdin);
+	printf("Enter Your Facility ID : ");
+	scanf("%[^\n]", &addFacility.facilityId);
+	rewind(stdin);
+	printf("Enter Facility Name(court): ");
+	scanf("%[^\n]", &addFacility.facilityName);
+	rewind(stdin);
+	printf("Enter your User ID : ");
+	scanf("%[^\n]", &addFacility.userId);
+	rewind(stdin);
+	printf("Enter Booking Date : ");
+	scanf("%[^\n]", &addFacility.bookingdate);
+	rewind(stdin);
+	printf("1. 8.00am - 10.00am\n");
+	printf("2. 10.00am - 12.00pm\n");
+	printf("3. 12.00pm - 2.00pm\n");
+	printf("4. 2.00pm - 4.00pm\n");
+	printf("Please Select Your Booking Time. (1-4) :");
+	scanf("%d", &chooseTime);
+	if (chooseTime == 1)
+	{
+		strcpy(addFacility.bookingtime, "8.00am");
+		strcpy(addFacility.bookingtimeuntil, "10.00am");
+	}
+	else if (chooseTime == 2)
+	{
+		strcpy(addFacility.bookingtime, "10.00am");
+		strcpy(addFacility.bookingtimeuntil, "12.00pm");
+	}
+	else if (chooseTime == 3)
+	{
+		strcpy(addFacility.bookingtime, "12.00pm");
+		strcpy(addFacility.bookingtimeuntil, "2.00pm");
+	}
+	else if (chooseTime == 4)
+	{
+		strcpy(addFacility.bookingtime, "2.00pm");
+		strcpy(addFacility.bookingtimeuntil, "4.00pm");
+	}
+
+	FILE *addFacility2;
+	addFacility2 = fopen("booking.txt", "r");
+	if (addFacility2 == NULL)
+	{
+		printf("File Not Found\n");
+		system("pause");
+		exit(-1);
+	}
+	while (fscanf(addFacility2, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^\n]\n", &checkFacilityUsage.facilityId, &checkFacilityUsage.facilityName, &checkFacilityUsage.userId, &checkFacilityUsage.bookingdate, &checkFacilityUsage.bookingtime, &checkFacilityUsage.bookingtimeuntil) != EOF)
+	{
+		if (strcmp(checkFacilityUsage.facilityId, addFacility.facilityId) == 0 && strcmp(checkFacilityUsage.bookingtime, addFacility.bookingtime) == 0 && strcmp(checkFacilityUsage.bookingdate, addFacility.bookingdate) == 0)
+		{
+			checking += 1;
+		}
+	}
+	fclose(addFacility2);
+	addFacility2 = fopen("booking.txt", "a");
+	if (addFacility2 == NULL)
+	{
+		printf("File Not Found\n");
+		system("pause");
+		exit(-1);
+	}
+	if (checking != 1)
+	{
+		printf("Congrats!!Your booking already confirmed.\n");
+		fprintf(addFacility2, "%s:%s:%s:%s:%s:%s", addFacility.facilityId, addFacility.facilityName, addFacility.userId, addFacility.bookingdate, addFacility.bookingtime, addFacility.bookingtimeuntil);
+
+	}
+	else
+	{
+		printf("\n");
+		printf("Sorry,This Facility already booked by others.\n");
+
+	}
+	fclose(addFacility2);
+	puts("");
+	printf("DO YOU WANT TO BACK TO MENU?\n");
+	printf("(y=YES/n=EXIT) ->");
+	rewind(stdin);
+	scanf("%c", &menu);
+	if (menu == 'Y' || menu == 'y')
+	{
+		system("cls");
+		main();
+	}
+	else
+	{
+		puts("");
+		printf("Bye,Thank you.\n");
+		system("pause");
+	}
+
+}
+
+void modifyBooking()
+{
+	char menu;
+	int chooseTime, chooseTime2;
+	int i = 0, count = 0, selection, k = 0, makeSure = 0;
+	facilityUse bookingFind[999];
+	facilityUse inputOld;
+	facilityUse inputNew;
+	FILE*find;
+	find = fopen("booking.txt", "r");
+	if (find == NULL)
+	{
+		printf("File Not Found\n");
+		system("cls");
+		exit(-1);
+	}
+	while (fscanf(find, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^\n]\n", &bookingFind[i].facilityId, &bookingFind[i].facilityName, &bookingFind[i].userId, &bookingFind[i].bookingdate, &bookingFind[i].bookingtime, &bookingFind[i].bookingtimeuntil) != EOF)
+	{
+		i++;
+		count++;
+	}
+	fclose(find);
+
+	system("cls");
+	printf("MODIFY BOOKING.\n");
+	printf("----------------\n");
+	printf("1. Facility ID\n");
+	printf("2. Facility Name\n");
+	printf("3. User ID\n");
+	printf("4. Booking Date\n");
+	printf("5. Booking Time\n\n");
+	printf("Selection :");
+	scanf("%d", &selection);
+
+	if (selection == 1)
+	{
+		printf("Enter Your Facility ID :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.facilityId);
+
+		printf("Enter Your Booking Date :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.bookingdate);
+		printf("Booking Time\n");
+		printf("1. 8.00am - 10.00am\n");
+		printf("2. 10.00am - 12.00pm\n");
+		printf("3. 12.00pm - 2.00pm\n");
+		printf("4. 2.00pm - 4.00pm\n");
+		printf("Select Your NEW Booking Time. (1-4) :");
+		scanf("%d", &chooseTime);
+		if (chooseTime == 1)
+		{
+			strcpy(inputOld.bookingtime, "8.00am");
+			strcpy(inputOld.bookingtimeuntil, "10.00am");
+		}
+		else if (chooseTime == 2)
+		{
+			strcpy(inputOld.bookingtime, "10.00am");
+			strcpy(inputOld.bookingtimeuntil, "12.00pm");
+		}
+		else if (chooseTime == 3)
+		{
+			strcpy(inputOld.bookingtime, "12.00pm");
+			strcpy(inputOld.bookingtimeuntil, "2.00pm");
+		}
+		else if (chooseTime == 4)
+		{
+			strcpy(inputOld.bookingtime, "2.00pm");
+			strcpy(inputOld.bookingtimeuntil, "4.00pm");
+		}
+
+		for (int j = 0; j < count; j++)
+		{
+			if (strcmp(inputOld.facilityId, bookingFind[j].facilityId) == 0 && strcmp(inputOld.bookingdate, bookingFind[j].bookingdate) == 0 && strcmp(inputOld.bookingtime, bookingFind[j].bookingtime) == 0)
+			{
+				printf("Enter Your New Facility ID :");
+				rewind(stdin);
+				scanf("%[^\n]", inputNew.facilityId);
+				strcpy(bookingFind[j].facilityId, inputNew.facilityId);
+				makeSure += 1;
+			}
+		}
+	}
+	else if (selection == 2)
+	{
+		printf("Enter Your Facility ID :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.facilityId);
+
+		printf("Enter Your Booking Date :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.bookingdate);
+
+		printf("Booking Time\n");
+		printf("1. 8.00am - 10.00am\n");
+		printf("2. 10.00am - 12.00pm\n");
+		printf("3. 12.00pm - 2.00pm\n");
+		printf("4. 2.00pm - 4.00pm\n");
+		printf("Please Select Your Booking Time. (1-4) :");
+		scanf("%d", &chooseTime);
+		if (chooseTime == 1)
+		{
+			strcpy(inputOld.bookingtime, "8.00am");
+			strcpy(inputOld.bookingtimeuntil, "10.00am");
+		}
+		else if (chooseTime == 2)
+		{
+			strcpy(inputOld.bookingtime, "10.00am");
+			strcpy(inputOld.bookingtimeuntil, "12.00pm");
+		}
+		else if (chooseTime == 3)
+		{
+			strcpy(inputOld.bookingtime, "12.00pm");
+			strcpy(inputOld.bookingtimeuntil, "2.00pm");
+		}
+		else if (chooseTime == 4)
+		{
+			strcpy(inputOld.bookingtime, "2.00pm");
+			strcpy(inputOld.bookingtimeuntil, "4.00pm");
+		}
+		for (int j = 0; j < count; j++)
+		{
+			if (strcmp(inputOld.facilityId, bookingFind[j].facilityId) == 0 && strcmp(inputOld.bookingdate, bookingFind[j].bookingdate) == 0 && strcmp(inputOld.bookingtime, bookingFind[j].bookingtime) == 0)
+			{
+				printf("Enter Your New Facility Name :");
+				rewind(stdin);
+				scanf("%[^\n]", inputNew.facilityName);
+				strcpy(bookingFind[j].facilityName, inputNew.facilityName);
+				makeSure += 1;
+			}
+		}
+	}
+	else if (selection == 3)
+	{
+		printf("Enter Your Facility ID :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.facilityId);
+
+		printf("Enter Your Booking Date :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.bookingdate);
+
+		printf("Booking Time\n");
+		printf("1. 8.00am - 10.00am\n");
+		printf("2. 10.00am - 12.00pm\n");
+		printf("3. 12.00pm - 2.00pm\n");
+		printf("4. 2.00pm - 4.00pm\n");
+		printf("Please Select Your Booking Time. (1-4) :");
+		scanf("%d", &chooseTime);
+		if (chooseTime == 1)
+		{
+			strcpy(inputOld.bookingtime, "8.00am");
+			strcpy(inputOld.bookingtimeuntil, "10.00am");
+		}
+		else if (chooseTime == 2)
+		{
+			strcpy(inputOld.bookingtime, "10.00am");
+			strcpy(inputOld.bookingtimeuntil, "12.00pm");
+		}
+		else if (chooseTime == 3)
+		{
+			strcpy(inputOld.bookingtime, "12.00pm");
+			strcpy(inputOld.bookingtimeuntil, "2.00pm");
+		}
+		else if (chooseTime == 4)
+		{
+			strcpy(inputOld.bookingtime, "2.00pm");
+			strcpy(inputOld.bookingtimeuntil, "4.00pm");
+		}
+		for (int j = 0; j < count; j++)
+		{
+			if (strcmp(inputOld.facilityId, bookingFind[j].facilityId) == 0 && strcmp(inputOld.bookingdate, bookingFind[j].bookingdate) == 0 && strcmp(inputOld.bookingtime, bookingFind[j].bookingtime) == 0)
+			{
+				printf("Enter Your New User ID :");
+				rewind(stdin);
+				scanf("%[^\n]", inputNew.userId);
+				strcpy(bookingFind[j].userId, inputNew.userId);
+				makeSure += 1;
+			}
+		}
+	}
+	else if (selection == 4)
+	{
+		printf("Enter Your Facility ID :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.facilityId);
+
+		printf("Enter Your Booking Date :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.bookingdate);
+
+		printf("Booking Time\n");
+		printf("1. 8.00am - 10.00am\n");
+		printf("2. 10.00am - 12.00pm\n");
+		printf("3. 12.00pm - 2.00pm\n");
+		printf("4. 2.00pm - 4.00pm\n");
+		printf("Please Select Your Booking Time. (1-4) :");
+		scanf("%d", &chooseTime);
+		if (chooseTime == 1)
+		{
+			strcpy(inputOld.bookingtime, "8.00am");
+			strcpy(inputOld.bookingtimeuntil, "10.00am");
+		}
+		else if (chooseTime == 2)
+		{
+			strcpy(inputOld.bookingtime, "10.00am");
+			strcpy(inputOld.bookingtimeuntil, "12.00pm");
+		}
+		else if (chooseTime == 3)
+		{
+			strcpy(inputOld.bookingtime, "12.00pm");
+			strcpy(inputOld.bookingtimeuntil, "2.00pm");
+		}
+		else if (chooseTime == 4)
+		{
+			strcpy(inputOld.bookingtime, "2.00pm");
+			strcpy(inputOld.bookingtimeuntil, "4.00pm");
+		}
+		for (int j = 0; j < count; j++)
+		{
+			if (strcmp(inputOld.facilityId, bookingFind[j].facilityId) == 0 && strcmp(inputOld.bookingdate, bookingFind[j].bookingdate) == 0 && strcmp(inputOld.bookingtime, bookingFind[j].bookingtime) == 0)
+			{
+				printf("Enter Your New Booking Date :");
+				rewind(stdin);
+				scanf("%[^\n]", inputNew.bookingdate);
+				strcpy(bookingFind[j].bookingdate, inputNew.bookingdate);
+				makeSure += 1;
+			}
+		}
+	}
+	else if (selection == 5)
+	{
+		printf("Enter Your Facility ID :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.facilityId);
+
+		printf("Enter Your Booking Date :");
+		rewind(stdin);
+		scanf("%[^\n]", &inputOld.bookingdate);
+
+		printf("Booking Time\n");
+		printf("1. 8.00am - 10.00am\n");
+		printf("2. 10.00am - 12.00pm\n");
+		printf("3. 12.00pm - 2.00pm\n");
+		printf("4. 2.00pm - 4.00pm\n");
+		printf("Please Select Your Booking Time. (1-4) :");
+		scanf("%d", &chooseTime);
+		if (chooseTime == 1)
+		{
+			strcpy(inputOld.bookingtime, "8.00am");
+			strcpy(inputOld.bookingtimeuntil, "10.00am");
+		}
+		else if (chooseTime == 2)
+		{
+			strcpy(inputOld.bookingtime, "10.00am");
+			strcpy(inputOld.bookingtimeuntil, "12.00pm");
+		}
+		else if (chooseTime == 3)
+		{
+			strcpy(inputOld.bookingtime, "12.00pm");
+			strcpy(inputOld.bookingtimeuntil, "2.00pm");
+		}
+		else if (chooseTime == 4)
+		{
+			strcpy(inputOld.bookingtime, "2.00pm");
+			strcpy(inputOld.bookingtimeuntil, "4.00pm");
+		}
+		for (int j = 0; j < count; j++)
+		{
+			if (strcmp(inputOld.facilityId, bookingFind[j].facilityId) == 0 && strcmp(inputOld.bookingdate, bookingFind[j].bookingdate) == 0 && strcmp(inputOld.bookingtime, bookingFind[j].bookingtime) == 0)
+			{
+				printf("New Booking Time\n");
+				printf("1. 8.00am - 10.00am\n");
+				printf("2. 10.00am - 12.00pm\n");
+				printf("3. 12.00pm - 2.00pm\n");
+				printf("4. 2.00pm - 4.00pm\n");
+				printf("Please Select Your Booking Time. (1-4) :");
+				scanf("%d", &chooseTime2);
+				if (chooseTime2 == 1)
+				{
+					strcpy(bookingFind[j].bookingtime, "8.00am");
+					strcpy(bookingFind[j].bookingtimeuntil, "10.00am");
+				}
+				else if (chooseTime2 == 2)
+				{
+					strcpy(bookingFind[j].bookingtime, "10.00am");
+					strcpy(bookingFind[j].bookingtimeuntil, "12.00pm");
+				}
+				else if (chooseTime2 == 3)
+				{
+					strcpy(bookingFind[j].bookingtime, "12.00pm");
+					strcpy(bookingFind[j].bookingtimeuntil, "2.00pm");
+				}
+				else if (chooseTime2 == 4)
+				{
+					strcpy(bookingFind[j].bookingtime, "2.00pm");
+					strcpy(bookingFind[j].bookingtimeuntil, "4.00pm");
+				}
+				makeSure += 1;
+			}
+		}
+	}
+	else
+	{
+	printf("\nINVALID SELECTION.\n\n");
+	}
+
+
+	if (makeSure == 1)
+	{
+		FILE *writeIntoFile;
+		writeIntoFile = fopen("booking.txt", "w");
+		for (k = 0; k < count; k++)
+		{
+			fprintf(writeIntoFile, "%s:%s:%s:%s:%s:%s", bookingFind[k].facilityId, bookingFind[k].facilityName, bookingFind[k].userId, bookingFind[k].bookingdate, bookingFind[k].bookingtime, bookingFind[k].bookingtimeuntil);
+		}
+	}
+
+	printf("DO YOU WANT TO BACK TO MENU?\n");
+	printf("(y=YES/n=EXIT) ->");
+	rewind(stdin);
+	scanf("%c", &menu);
+	if (menu == 'Y' || menu == 'y')
+	{
+		system("cls");
+		main();
+	}
+	else
+	{
+		puts("");
+		printf("OK Bye,Thank you.\n");
+	}
+
+}
+
+void searchBooking()
+{
+	char menu;
+	facilityUse searchInput;
+	facilityUse search;
+
+
+	FILE*find;
+	find = fopen("booking.txt", "r");
+	if (find == NULL)
+	{
+		printf("FILE Not Found\n");
+		system("pause");
+		exit(-1);
+	}
+	printf("Please enter the Facility ID that you want to search :");
+	rewind(stdin);
+	scanf("%[^\n]", &searchInput.facilityId);
+
+
+	printf("Please enter the Date that you want to search :");
+	rewind(stdin);
+	scanf("%[^\n]", &searchInput.bookingdate);
+
+
+	while (fscanf(find, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^\n]\n", &search.facilityId, &search.facilityName, &search.userId, &search.bookingdate, &search.bookingtime, &search.bookingtimeuntil) != EOF)
+	{
+		if (strcmp(searchInput.facilityId, search.facilityId) == 0 && strcmp(searchInput.bookingdate, search.bookingdate) == 0)
+		{
+			system("cls");
+			printf("BELOW IS THE BOOKING DETAILS.\n");
+			printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+			printf("Facility ID :%s\n", search.facilityId);
+			printf("Facility Name :%s\n", search.facilityName);
+			printf("User ID :%s\n", search.userId);
+			printf("Booking Date :%s\n", search.bookingdate);
+			printf("Booking Time: %s - %s\n", search.bookingtime, search.bookingtimeuntil);
+		}
+		else if (strcmp(searchInput.facilityId, search.facilityId) == 0 && strcmp(searchInput.bookingdate, search.bookingdate) == 0)
+		{
+			system("cls");
+			printf("Opps sorry,this booking doesn't exist.\n");
+			break;
+		}
+		/*else
+		{
+			system("cls");
+			printf("Opps sorry,this booking doesn't exist.\n");
+			break;
+		}*/
+	}
+	fclose(find);
+	puts("");
+	printf("DO YOU WANT TO BACK TO MENU?\n");
+	printf("(y=YES/n=EXIT) ->");
+	rewind(stdin);
+	scanf("%c", &menu);
+	if (menu == 'Y' || menu == 'y')
+	{
+		system("cls");
+		main();
+	}
+	else
+	{
+		puts("");
+		printf("OK Bye,Thank you.\n");
+	}
+
+}
+
+void displayBooking()
+{
+	char menu;
+	facilityUse display;
+	FILE* displayuse;
+	displayuse = fopen("booking.txt", "r");
+	if (displayuse == NULL)
+	{
+		printf("FILE Not Found\n");
+		system("pause");
+		exit(-1);
+	}
+	system("cls");
+	printf("BOOKING LIST.\n");
+	printf("==============\n");
+	while (fscanf(displayuse, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^\n]\n", &display.facilityId, &display.facilityName, &display.userId, &display.bookingdate, &display.bookingtime, &display.bookingtimeuntil) != EOF)
+	{
+		printf("%s:%s:%s:%s:%s-%s\n", display.facilityId, display.facilityName, display.userId, display.bookingdate, display.bookingtime, display.bookingtimeuntil);
+		printf("---------------------------------------------------------\n");
+	}
+	puts("");
+	printf("DO YOU WANT TO BACK TO MENU?\n");
+	printf("(y=YES/n=EXIT) ->");
+	rewind(stdin);
+	scanf("%c", &menu);
+	if (menu == 'Y' || menu == 'y')
+	{
+		system("cls");
+		main();
+	}
+	else if(menu == 'N' || menu == 'n')
+	{
+		puts("");
+		printf("OK Bye,Thank you.\n");
+		
+	}
+
+}

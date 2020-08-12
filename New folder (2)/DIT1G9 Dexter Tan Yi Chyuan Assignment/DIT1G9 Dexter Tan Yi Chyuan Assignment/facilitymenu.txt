@@ -1,0 +1,3 @@
+F0001|BasketBall Court|BasketBallCourt Indoor|Sport Complex|12|
+F0002|Badminton Court|Badminton Court 1|Sport Complex|4|
+F0003|Basket Ball|BasketBall Court Outdoor|opposite yumyum|12|
